@@ -8,7 +8,6 @@ RUN bun install --frozen-lockfile
 
 COPY . .
 
-# Rompe el cache de Railway en cada build
 ARG CACHEBUST=1
 RUN bun run build
 
@@ -32,5 +31,8 @@ COPY --from=deps    /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 
 EXPOSE 3000
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD wget -qO- http://localhost:3000/health || exit 1
 
 CMD ["bun", "dist/src/main.js"]

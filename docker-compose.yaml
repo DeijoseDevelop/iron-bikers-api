@@ -48,7 +48,7 @@ services:
   api:
     build:
       context: ../ironbikers-api
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
       target: builder        # en dev usamos el stage builder para hot reload
     container_name: ironbikers_api
     restart: unless-stopped

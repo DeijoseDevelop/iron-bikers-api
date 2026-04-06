@@ -15,6 +15,9 @@ async function bootstrap() {
     }),
   );
 
+  const fastifyInstance = app.getHttpAdapter().getInstance();
+  fastifyInstance.get('/health', () => ({ status: 'ok' }));
+
   app.setGlobalPrefix('api');
 
   app.enableVersioning({
