@@ -19,9 +19,14 @@ export class MotorcyclesController {
 
     @Get()
     findAll(@Request() req) {
-        // Simple logic to fetch user's motorcycles unless they are admin
-        const userId = req.user.role === 'admin' ? undefined : req.user.id;
-        return this.motorcyclesService.findAll(userId);
+        // Obtains all motorcycles, mainly for admins if needed
+        return this.motorcyclesService.findAll(undefined);
+    }
+
+    @Get('mine')
+    findMine(@Request() req) {
+        // Obtenemos estrictamente las motos del usuario actual sin importar su rol
+        return this.motorcyclesService.findAll(req.user.id);
     }
 
     @Get(':id')
