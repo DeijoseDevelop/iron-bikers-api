@@ -137,7 +137,16 @@ export class EventsService {
     }
 
     // --- RSVP LOGIC ---
-    async rsvp(eventId: string, userId: string) {
+    async rsvp(eventId: string, user: any, requestedRideRole?: string) {
+        const userId = user.id;
+        const userRole = user.role;
+        let rideRole = requestedRideRole || 'rider';
+
+        // Solo admin o lider pueden elegir un rol distinto a rider
+        if (rideRole !== 'rider' && userRole !== 'admin' && userRole !== 'lider') {
+            rideRole = 'rider';
+        }
+
         const event = await this.findOne(eventId);
 
         if (event.status !== 'proximo') {
@@ -184,8 +193,8 @@ export class EventsService {
         try {
             await this.db.query(
                 `INSERT INTO event_attendees (event_id, user_id, ride_role, confirmed_at) 
-                VALUES ($1, $2, 'rider', NOW())`,
-                [eventId, userId],
+                VALUES ($1, $2, $3, NOW())`,
+                [eventId, userId, rideRole],
             );
         } catch (e: any) {
             if (e.code === '23505') { // Unique violation

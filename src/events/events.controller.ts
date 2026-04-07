@@ -67,8 +67,8 @@ export class EventsController {
 
     // --- RSVP ---
     @Post(':id/rsvp')
-    rsvp(@Param('id') id: string, @Request() req) {
-        return this.eventsService.rsvp(id, req.user.id);
+    rsvp(@Param('id') id: string, @Request() req, @Body('rideRole') rideRole?: string) {
+        return this.eventsService.rsvp(id, req.user, rideRole);
     }
 
     @Delete(':id/rsvp')
