@@ -2,8 +2,8 @@ import { IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
 
 export enum AlertType {
     PINCHAZO = 'pinchazo',
-    SIN_GASOLINA = 'sin-gasolina',
-    FALLA_MECANICA = 'falla-mecanica',
+    SIN_GASOLINA = 'sin_gasolina',
+    FALLA_MECANICA = 'falla_mecanica',
     ACCIDENTE = 'accidente',
     MEDICA = 'medica',
     OTRO = 'otro',
