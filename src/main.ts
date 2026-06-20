@@ -37,16 +37,24 @@ async function bootstrap() {
   );
 
   // CORS — compatible con app móvil Capacitor
-  const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') ?? [];
+  const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',').map((o) => o.trim()).filter(Boolean) ?? [];
+
+  // Capacitor Android/iOS sirve la WebView desde estos orígenes (no vienen de ALLOWED_ORIGINS).
+  // Android default: https://localhost — sin esto el login falla en dispositivo físico.
+  const capacitorOrigins = new Set([
+    'capacitor://localhost',
+    'https://localhost',
+    'http://localhost',
+  ]);
 
   app.enableCors({
     origin: (origin, callback) => {
-      // Sin origin = app nativa Capacitor, Postman, curl — permitir siempre
+      // Sin origin = Postman, curl, algunos clientes nativos — permitir siempre
       if (!origin) {
         return callback(null, true);
       }
 
-      if (allowedOrigins.includes(origin)) {
+      if (capacitorOrigins.has(origin) || allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
 
